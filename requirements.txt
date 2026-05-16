@@ -1,0 +1,12 @@
+streamlit
+pandas
+plotly
+requests
+openpyxl
+pytz
+python-dateutil
+urllib3
+certifi
+charset-normalizer
+idna
+tzdata
