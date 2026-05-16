@@ -946,6 +946,47 @@ button[data-testid*="baseButton-primary"]:hover,
   min-height    : 96px !important;
 }
 
+/* Hide Material-icon ligature fallback text inside the uploader button
+   that renders as literal "upload" before the icon font finishes loading. */
+[data-testid="stFileUploader"] button [data-testid="stIconMaterial"],
+[data-testid="stFileUploaderDropzone"] button [data-testid="stIconMaterial"],
+[data-testid="stBaseButton-secondary"] [data-testid="stIconMaterial"] {
+  font-family : 'Material Symbols Outlined', 'Material Symbols Rounded',
+                'Material Icons' !important;
+  font-weight : normal !important;
+  font-style  : normal !important;
+  font-size   : 1.1rem !important;
+  line-height : 1 !important;
+  font-feature-settings: 'liga' !important;
+  -webkit-font-feature-settings: 'liga' !important;
+  -webkit-font-smoothing: antialiased !important;
+  text-rendering: optimizeLegibility !important;
+  direction   : ltr !important;
+  white-space : nowrap !important;
+  word-wrap   : normal !important;
+  display     : inline-block !important;
+  width       : 1.1rem !important;
+  height      : 1.1rem !important;
+  overflow    : hidden !important;
+  color       : currentColor !important;
+}
+
+/* Final safety net: if the icon font still fails to render and the
+   element ends up looking like plain text, hide it so we only see the
+   button label instead of "uploadupload". */
+@supports not (font-feature-settings: 'liga') {
+  [data-testid="stFileUploader"] button [data-testid="stIconMaterial"] {
+    display : none !important;
+  }
+}
+
+[data-testid="stFileUploader"] button,
+[data-testid="stFileUploaderDropzone"] button {
+  display     : inline-flex !important;
+  align-items : center !important;
+  gap         : .4rem !important;
+}
+
 /* ── TEXT INPUTS ────────────────────────────────────────────────────────── */
 .stTextInput input, .stTextArea textarea, select {
   background    : var(--bg-panel) !important;
