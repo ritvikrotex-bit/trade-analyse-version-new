@@ -471,7 +471,6 @@ def _build_client_report(account_no: str, r: dict, scalping_choice: int, ip_coun
     trading_pattern = ", ".join(pattern_notes) if pattern_notes else "Normal Trading Flow"
     return (
         f"Account: {account_no}\n"
-        f"IP: {ip_country}\n"
         f"Total Trades: {r['total_positions']}\n"
         f"Total Profit: ${r['total_profit']:.2f}\n"
         f"Scalping Trades: {r['scalping_count']} ({r['scalping_percentage']:.1f}% of total)\n"
@@ -545,7 +544,8 @@ def _render_account_expander(filename: str, account_no: str, r: dict, scalping_c
     flow = r["flow_classification"]
     dealer_color = "#ef4444" if "B-Book" in dealer else ("#10b981" if "A-Book" in dealer else "#f59e0b")
 
-    label = f"📁 {account_no} — {filename}  |  Net: ${r['total_profit']:.2f}  |  PF: {r['profit_factor']:.2f}  |  {dealer}"
+    short_name = filename if len(filename) <= 40 else filename[:37] + "..."
+    label = f"📁 Account {account_no} · {short_name} · {dealer}"
     with st.expander(label, expanded=False):
         st.markdown(
             f"<div style='padding:12px;border-radius:8px;background:rgba(233,238,251,0.7);border-left:5px solid {dealer_color};margin-bottom:10px'>"
@@ -935,8 +935,15 @@ button[data-testid*="baseButton-primary"]:hover,
 /* ── FILE UPLOADER ──────────────────────────────────────────────────────── */
 [data-testid="stFileUploader"] {
   background    : var(--bg-panel) !important;
+  border-radius : var(--radius) !important;
+}
+
+[data-testid="stFileUploader"] section,
+[data-testid="stFileUploaderDropzone"] {
   border        : 1.5px dashed var(--border) !important;
   border-radius : var(--radius) !important;
+  padding       : 1rem 1.25rem !important;
+  min-height    : 96px !important;
 }
 
 /* ── TEXT INPUTS ────────────────────────────────────────────────────────── */
@@ -981,9 +988,26 @@ button[data-testid*="baseButton-primary"]:hover,
 }
 
 [data-testid="stExpander"] summary {
-  font-family : var(--font-ui) !important;
-  font-weight : 600 !important;
-  color       : var(--text) !important;
+  font-family  : var(--font-ui) !important;
+  font-weight  : 600 !important;
+  color        : var(--text) !important;
+  padding      : .75rem 1rem !important;
+  gap          : 1rem !important;
+}
+
+[data-testid="stExpander"] summary svg {
+  flex-shrink  : 0 !important;
+  margin-right : .25rem !important;
+}
+
+[data-testid="stExpander"] summary > div,
+[data-testid="stExpander"] summary p,
+[data-testid="stExpander"] summary [data-testid="stMarkdownContainer"] {
+  margin-left  : 1.25rem !important;
+  white-space  : nowrap !important;
+  overflow     : hidden !important;
+  text-overflow: ellipsis !important;
+  min-width    : 0 !important;
 }
 
 /* ── DATAFRAME ──────────────────────────────────────────────────────────── */
