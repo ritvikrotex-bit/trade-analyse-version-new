@@ -469,6 +469,11 @@ def _build_client_report(account_no: str, r: dict, scalping_choice: int, ip_coun
     if r["burst_count"] > 5:
         pattern_notes.append("Burst/High-Frequency")
     trading_pattern = ", ".join(pattern_notes) if pattern_notes else "Normal Trading Flow"
+    total_positions = r['total_positions']
+    toxic_br_percentage = (
+        (r['reversal_count'] + r['burst_count']) / total_positions * 100
+        if total_positions > 0 else 0.0
+    )
     return (
         f"Account: {account_no}\n"
         f"Total Trades: {r['total_positions']}\n"
@@ -480,6 +485,7 @@ def _build_client_report(account_no: str, r: dict, scalping_choice: int, ip_coun
         f"Burst Trades: {r['burst_count']} [{r['burst_percentage']:.1f}% of total]\n"
         f"Burst Profit: ${r['burst_profit']:.2f} [{r['burst_profit_percentage']:.1f}% of total profit]\n"
         f"Toxic Trading %: {r['toxic_percentage']:.1f}%\n"
+        f"Toxic Trading (b+r) : {toxic_br_percentage:.1f}%\n"
         f"Trading Pattern: {trading_pattern}\n"
         f"Scalping Threshold Used: {scalping_choice} seconds"
     )
